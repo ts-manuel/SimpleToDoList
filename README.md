@@ -45,5 +45,3 @@ dotnet new sln --name SimpleToDoList
 dotnet sln add src/SimpleToDoList
 dotnet sln add tests/SimpleToDolIstTests
 ```
-
-After creating the xUnit project SimpleToDoListTests use the GUI to add a reference to the SimpleToDoList
