@@ -16,7 +16,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
@@ -25,10 +25,4 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run unit tests with report
-        run: dotnet test --configuration Release --no-build --logger trx --results-directory "TestResults"
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: dotnet-results
-          path: ./TestResults
+        run: dotnet test --configuration Release --no-build
