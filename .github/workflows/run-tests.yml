@@ -19,16 +19,17 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore ./SimpleToDoList.sln
+        run: dotnet restore
 
       - name: Build the solution
-        run: dotnet build ./SimpleToDoList.sln --configuration Release --no-restore 
+        run: dotnet build --configuration Release --no-restore
 
       - name: Run unit tests with report
-        run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
+        run: dotnet test --configuration Release --no-build --logger trx --results-directory "TestResults"
         
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          name: Test Results
-          path: ./tests/SimpleToDoListTests/TestResults/TestResults.trx
+          name: dotnet-results
+          path: TestResults
+          if: always()
