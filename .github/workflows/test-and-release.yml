@@ -11,10 +11,10 @@ jobs:
   # Build and Test Job
   # This job runs on every push to main or develop
   test:
-    #runs-on: ubuntu-latest
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
             machine: linux
@@ -22,9 +22,6 @@ jobs:
           - os: windows-latest
             machine: win
             arch: x64
-          #- os: macos-latest
-          #  machine: macos
-          #  arch: arm64
 
     steps:
       - name: Checkout repository code
@@ -54,6 +51,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
             machine: linux
@@ -61,9 +59,6 @@ jobs:
           - os: windows-latest
             machine: win
             arch: x64
-          #- os: macos-latest
-          #  machine: macos
-          #  arch: arm64
 
     steps:
       - name: Checkout repository code

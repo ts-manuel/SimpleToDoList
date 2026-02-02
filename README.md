@@ -1,6 +1,8 @@
 # Simple TODO List
 
-[![develop-tests](https://github.com/ts-manuel/SimpleToDoList/actions/workflows/run-tests.yml/badge.svg?branch=develop)](https://github.com/ts-manuel/SimpleToDoList/actions/workflows/run-tests.yml)
+[![main tests](https://github.com/ts-manuel/SimpleToDoList/actions/workflows/test-and-release.yml/badge.svg?branch=main)](https://github.com/ts-manuel/SimpleToDoList/actions/workflows/test-and-release.yml)
+[![develop](https://github.com/ts-manuel/SimpleToDoList/actions/workflows/test-and-release.yml/badge.svg?branch=develop)](https://github.com/ts-manuel/SimpleToDoList/actions/workflows/test-and-release.yml)
+
 
 This project is based on the Avalonia SimpleToDoList app, it's main purpose is to lear how to develop graphical applications under Linux with .NET Core.
 On top of the example I've added testing and GitHub actions.
