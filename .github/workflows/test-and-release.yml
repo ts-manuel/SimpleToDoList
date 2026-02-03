@@ -1,11 +1,14 @@
 name: test-and-release
 
 # Trigger when a push occurs on main or develop
+# Also trigger on tags starting with 'vX.X.X'
 on:
   push:
     branches:
       - main
       - develop
+    tags:
+      - 'v*.*.*'
 
 jobs:
   # Build and Test Job
@@ -41,12 +44,13 @@ jobs:
       - name: Run unit tests with report
         run: dotnet test --configuration Release --no-build
 
+
   # Release Job
   # This job runs only on main branch when a tag starting with 'vX.X.X' is pushed
   release:
     needs: test
     if: |
-      github.ref == 'refs/heads/main' &&
+      github.event.base_ref == 'refs/heads/main' &&
       startsWith(github.event.ref, 'refs/tags/v')
     runs-on: ${{ matrix.os }}
     strategy:
@@ -86,11 +90,7 @@ jobs:
 
       - name: Publish App
         run: |
-          dotnet publish src/SimpleToDoList/SimpleToDoList.csproj \
-            -c Release \
-            -r ${{ matrix.machine }}-${{ matrix.arch }} \
-            --self-contained true \
-            -o ./publish
+          dotnet publish src/SimpleToDoList/SimpleToDoList.csproj -c Release -r ${{ matrix.machine }}-${{ matrix.arch }} --self-contained true -o ./publish
 
       - name: Package Release
         shell: bash
