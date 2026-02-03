@@ -48,6 +48,7 @@ jobs:
   # Release Job
   # This job runs only on main branch when a tag starting with 'vX.X.X' is pushed
   release:
+    needs: test
     if: |
       github.event.base_ref == 'refs/heads/main' &&
       startsWith(github.event.ref, 'refs/tags/v')
