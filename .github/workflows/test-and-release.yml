@@ -93,7 +93,6 @@ jobs:
           dotnet publish src/SimpleToDoList/SimpleToDoList.csproj \
             -c Release \
             -r ${{ matrix.machine }}-${{ matrix.arch }} \
-            --self-contained true \
             -o ./publish
 
       - name: Package Release
