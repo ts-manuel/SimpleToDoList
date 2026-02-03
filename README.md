@@ -1,7 +1,7 @@
 # Simple TODO List
 
-![GitHub Actions Workflow Status main](https://img.shields.io/github/actions/workflow/status/ts-manuel/SimpleToDoList/test-and-release.yml?branch=main&logo=github&label=main)
-![GitHub Actions Workflow Status develop](https://img.shields.io/github/actions/workflow/status/ts-manuel/SimpleToDoList/test-and-release.yml?branch=develop&logo=github&label=develop)
+![GitHub Actions Workflow Status main](https://img.shields.io/github/actions/workflow/status/ts-manuel/SimpleToDoList/test.yml?branch=main&logo=github&label=main)
+![GitHub Actions Workflow Status develop](https://img.shields.io/github/actions/workflow/status/ts-manuel/SimpleToDoList/test.yml?branch=develop&logo=github&label=develop)
 ![GitHub Release](https://img.shields.io/github/v/release/ts-manuel/SimpleToDoList?display_name=release&label=latest%20release)
 
 
