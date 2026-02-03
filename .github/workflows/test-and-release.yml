@@ -42,12 +42,12 @@ jobs:
         run: dotnet test --configuration Release --no-build
 
   # Release Job
-  # This job runs only on main branch when a tag starting with 'version-' is pushed
+  # This job runs only on main branch when a tag starting with 'vX.X.X' is pushed
   release:
     needs: test
     if: |
       github.ref == 'refs/heads/main' &&
-      startsWith(github.event.ref, 'refs/tags/version-')
+      startsWith(github.event.ref, 'refs/tags/v')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -68,8 +68,8 @@ jobs:
         id: vars
         shell: bash
         run: |
-          # Extract version (e.g., '1.2.3' from 'version-1.2.3')
-          VERSION=${GITHUB_REF_NAME#version-}
+          # Extract version (e.g., '1.2.3' from 'v1.2.3')
+          VERSION=${GITHUB_REF_NAME#v}
           APP_NAME="SimpleToDoList"
           MACHINE="${{ matrix.machine }}"
           ARCH="${{ matrix.arch }}"
