@@ -90,9 +90,7 @@ jobs:
 
       - name: Publish App
         run: |
-          dotnet publish src/SimpleToDoList/SimpleToDoList.csproj \
-            -r ${{ matrix.machine }}-${{ matrix.arch }} \
-            -o ./publish
+          dotnet publish src/SimpleToDoList/SimpleToDoList.csproj -r ${{ matrix.machine }}-${{ matrix.arch }} -o ./publish
 
       - name: Package Release
         shell: bash
