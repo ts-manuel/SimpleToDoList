@@ -8,7 +8,7 @@
 	<description>
 		<p>Super Simple To Do List</p>
 	</description>
-  <url type="homepage">https://https://github.com/ts-manuel/SimpleToDoList</url>
+  <url type="homepage">https://github.com/ts-manuel/SimpleToDoList</url>
 	<launchable type="desktop-id">com.ts_manuel.SimpleToDoList.desktop</launchable>
 	<provides>
 		<id>com.ts_manuel.SimpleToDoList.desktop</id>
