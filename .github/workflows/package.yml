@@ -48,41 +48,41 @@ jobs:
         with:
           name: simpletodolist.${{ matrix.runtime }}
 
-  osx-app:
-    name: Package macOS
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        runtime: [osx-x64, osx-arm64]
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Download build
-        uses: actions/download-artifact@v4
-        with:
-          name: simpletodolist.${{ matrix.runtime }}
-          path: build
-
-      - name: Package
-        env:
-          VERSION: ${{ inputs.version }}
-          RUNTIME: ${{ matrix.runtime }}
-        run: |
-          mkdir build/SimpleToDoList
-          tar -xf "build/simpletodolist.${{ matrix.runtime }}.tar" -C build/SimpleToDoList
-          ./build/scripts/package.osx-app.sh
-
-      - name: Upload package artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: package.${{ matrix.runtime }}
-          path: build/simpletodolist_*.zip
-
-      - name: Delete temp artifacts
-        uses: geekyeggo/delete-artifact@v5
-        with:
-          name: simpletodolist.${{ matrix.runtime }}
+#  osx-app:
+#    name: Package macOS
+#    runs-on: macos-latest
+#    strategy:
+#      matrix:
+#        runtime: [osx-x64, osx-arm64]
+#    steps:
+#      - name: Checkout sources
+#        uses: actions/checkout@v4
+#
+#      - name: Download build
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: simpletodolist.${{ matrix.runtime }}
+#          path: build
+#
+#      - name: Package
+#        env:
+#          VERSION: ${{ inputs.version }}
+#          RUNTIME: ${{ matrix.runtime }}
+#        run: |
+#          mkdir build/SimpleToDoList
+#          tar -xf "build/simpletodolist.${{ matrix.runtime }}.tar" -C build/SimpleToDoList
+#          ./build/scripts/package.osx-app.sh
+#
+#      - name: Upload package artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: package.${{ matrix.runtime }}
+#          path: build/simpletodolist_*.zip
+#
+#      - name: Delete temp artifacts
+#        uses: geekyeggo/delete-artifact@v5
+#        with:
+#          name: simpletodolist.${{ matrix.runtime }}
 
   linux:
     name: Package Linux
