@@ -31,29 +31,29 @@ if [[ ! -f "appimagetool" ]]; then
     chmod +x appimagetool
 fi
 
-rm -f SourceGit/*.dbg
+rm -f SimpleToDoList/*.dbg
 
-mkdir -p SourceGit.AppDir/opt
-mkdir -p SourceGit.AppDir/usr/share/metainfo
-mkdir -p SourceGit.AppDir/usr/share/applications
+mkdir -p SimpleToDoList.AppDir/opt
+mkdir -p SimpleToDoList.AppDir/usr/share/metainfo
+mkdir -p SimpleToDoList.AppDir/usr/share/applications
 
-cp -r SourceGit SourceGit.AppDir/opt/sourcegit
-desktop-file-install resources/_common/applications/sourcegit.desktop --dir SourceGit.AppDir/usr/share/applications \
-    --set-icon com.sourcegit_scm.SourceGit --set-key=Exec --set-value=AppRun
-mv SourceGit.AppDir/usr/share/applications/{sourcegit,com.sourcegit_scm.SourceGit}.desktop
-cp resources/_common/icons/sourcegit.png SourceGit.AppDir/com.sourcegit_scm.SourceGit.png
-ln -rsf SourceGit.AppDir/opt/sourcegit/sourcegit SourceGit.AppDir/AppRun
-ln -rsf SourceGit.AppDir/usr/share/applications/com.sourcegit_scm.SourceGit.desktop SourceGit.AppDir
-cp resources/appimage/sourcegit.appdata.xml SourceGit.AppDir/usr/share/metainfo/com.sourcegit_scm.SourceGit.appdata.xml
+cp -r SimpleToDoList SimpleToDoList.AppDir/opt/simpletodolist
+desktop-file-install resources/_common/applications/simpletodolist.desktop --dir SimpleToDoList.AppDir/usr/share/applications \
+    --set-icon com.simpletodolist_scm.SimpleToDoList --set-key=Exec --set-value=AppRun
+mv SimpleToDoList.AppDir/usr/share/applications/{simpletodolist,com.simpletodolist_scm.SimpleToDoList}.desktop
+cp resources/_common/icons/simpletodolist.png SimpleToDoList.AppDir/com.simpletodolist_scm.SimpleToDoList.png
+ln -rsf SimpleToDoList.AppDir/opt/simpletodolist/simpletodolist SimpleToDoList.AppDir/AppRun
+ln -rsf SimpleToDoList.AppDir/usr/share/applications/com.simpletodolist_scm.SimpleToDoList.desktop SimpleToDoList.AppDir
+cp resources/appimage/simpletodolist.appdata.xml SimpleToDoList.AppDir/usr/share/metainfo/com.simpletodolist_scm.SimpleToDoList.appdata.xml
 
-ARCH="$appimage_arch" ./appimagetool -v SourceGit.AppDir "sourcegit-$VERSION.linux.$arch.AppImage"
+ARCH="$appimage_arch" ./appimagetool -v SimpleToDoList.AppDir "simpletodolist-$VERSION.linux.$arch.AppImage"
 
-mkdir -p resources/deb/opt/sourcegit/
+mkdir -p resources/deb/opt/simpletodolist/
 mkdir -p resources/deb/usr/bin
 mkdir -p resources/deb/usr/share/applications
 mkdir -p resources/deb/usr/share/icons
-cp -f SourceGit/* resources/deb/opt/sourcegit
-ln -rsf resources/deb/opt/sourcegit/sourcegit resources/deb/usr/bin
+cp -f SimpleToDoList/* resources/deb/opt/simpletodolist
+ln -rsf resources/deb/opt/simpletodolist/simpletodolist resources/deb/usr/bin
 cp -r resources/_common/applications resources/deb/usr/share
 cp -r resources/_common/icons resources/deb/usr/share
 # Calculate installed size in KB
@@ -64,7 +64,7 @@ sed -i -e "s/^Version:.*/Version: $VERSION/" \
     -e "s/^Installed-Size:.*/Installed-Size: $installed_size/" \
     resources/deb/DEBIAN/control
 # Build deb package with gzip compression
-dpkg-deb -Zgzip --root-owner-group --build resources/deb "sourcegit_$VERSION-1_$arch.deb"
+dpkg-deb -Zgzip --root-owner-group --build resources/deb "simpletodolist_$VERSION-1_$arch.deb"
 
 rpmbuild -bb --target="$target" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version $VERSION"
-mv "resources/rpm/RPMS/$target/sourcegit-$VERSION-1.$target.rpm" ./
+mv "resources/rpm/RPMS/$target/simpletodolist-$VERSION-1.$target.rpm" ./
