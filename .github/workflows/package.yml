@@ -1,0 +1,133 @@
+# This action is triggered by a call from the CI workflow.
+# It performs the packaging for the supported platforms.
+# The result is a packaged artifact and the deletion of temporary build artifacts.
+# The packaged artifact is ready for deployment.
+
+name: Package
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: SimpleToDoList package version
+        required: true
+        type: string
+
+jobs:
+  windows:
+    name: Package Windows
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        runtime: [win-x64] #[win-x64, win-arm64]
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: simpletodolist.${{ matrix.runtime }}
+          path: build/SimpleToDoList
+
+      - name: Package
+        shell: pwsh
+        env:
+          VERSION: ${{ inputs.version }}
+          RUNTIME: ${{ matrix.runtime }}
+        run: ./build/scripts/package.win.ps1
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: package.${{ matrix.runtime }}
+          path: build/simpletodolist_*.zip
+
+      - name: Delete temp artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: simpletodolist.${{ matrix.runtime }}
+
+#  osx-app:
+#    name: Package macOS
+#    runs-on: macos-latest
+#    strategy:
+#      matrix:
+#        runtime: [osx-x64, osx-arm64]
+#    steps:
+#      - name: Checkout sources
+#        uses: actions/checkout@v4
+#
+#      - name: Download build
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: simpletodolist.${{ matrix.runtime }}
+#          path: build
+#
+#      - name: Package
+#        env:
+#          VERSION: ${{ inputs.version }}
+#          RUNTIME: ${{ matrix.runtime }}
+#        run: |
+#          mkdir build/SimpleToDoList
+#          tar -xf "build/simpletodolist.${{ matrix.runtime }}.tar" -C build/SimpleToDoList
+#          ./build/scripts/package.osx-app.sh
+#
+#      - name: Upload package artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: package.${{ matrix.runtime }}
+#          path: build/simpletodolist_*.zip
+#
+#      - name: Delete temp artifacts
+#        uses: geekyeggo/delete-artifact@v5
+#        with:
+#          name: simpletodolist.${{ matrix.runtime }}
+
+  linux:
+    name: Package Linux
+    runs-on: ubuntu-latest
+    container: ubuntu:20.04
+    strategy:
+      matrix:
+        runtime: [linux-x64] #[linux-x64, linux-arm64]
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Download package dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
+          apt-get update
+          apt-get install -y curl wget git dpkg-dev fakeroot tzdata zip unzip desktop-file-utils rpm libfuse2 file build-essential binutils
+
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: simpletodolist.${{ matrix.runtime }}
+          path: build
+
+      - name: Package
+        env:
+          VERSION: ${{ inputs.version }}
+          RUNTIME: ${{ matrix.runtime }}
+          APPIMAGE_EXTRACT_AND_RUN: 1
+        run: |
+          mkdir build/SimpleToDoList
+          tar -xf "build/simpletodolist.${{ matrix.runtime }}.tar" -C build/SimpleToDoList
+          ./build/scripts/package.linux.sh
+
+      - name: Upload package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: package.${{ matrix.runtime }}
+          path: |
+            build/simpletodolist-*.AppImage
+            build/simpletodolist_*.deb
+            build/simpletodolist-*.rpm
+
+      - name: Delete temp artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: simpletodolist.${{ matrix.runtime }}

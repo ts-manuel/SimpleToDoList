@@ -1,0 +1,38 @@
+# This workflow gets triggered on pushes and pull requests to the 'develop' branch,
+# as well as on manual dispatch and can be called by other workflows.
+# It orchestrates the testing, building and packaging of the project.
+# The result is a packaged artifact ready for deployment for every system supported.
+
+name: Continuous Integration
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      version:
+        description: "The calculated version string"
+        value: ${{ jobs.version.outputs.version }}
+
+jobs:
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yml
+
+  build:
+    needs: test
+    name: Build
+    uses: ./.github/workflows/build.yml
+
+  version:
+    name: Version Generator
+    uses: ./.github/workflows/version.yml
+
+  package:
+    needs: [build, version]
+    name: Package
+    uses: ./.github/workflows/package.yml
+    with:
+      version: ${{ needs.version.outputs.version }}

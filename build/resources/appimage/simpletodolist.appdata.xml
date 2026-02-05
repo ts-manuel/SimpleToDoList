@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>com.ts_manuel.SimpleToDoList</id>
+	<metadata_license>MIT</metadata_license>
+	<project_license>MIT</project_license>
+	<name>SimpleToDoList</name>
+	<summary>Super Simple To Do List</summary>
+	<description>
+		<p>Super Simple To Do List</p>
+	</description>
+  <url type="homepage">https://github.com/ts-manuel/SimpleToDoList</url>
+	<launchable type="desktop-id">com.ts_manuel.SimpleToDoList.desktop</launchable>
+	<provides>
+		<id>com.ts_manuel.SimpleToDoList.desktop</id>
+	</provides>
+</component>

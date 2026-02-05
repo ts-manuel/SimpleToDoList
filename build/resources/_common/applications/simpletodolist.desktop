@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SimpleToDoList
+Comment=Super Simple To Do List
+Exec=/opt/simpletodolist/simpletodolist
+Icon=/usr/share/icons/simpletodolist.png
+Terminal=false
+Type=Application
+Categories=Development
+MimeType=inode/directory;
