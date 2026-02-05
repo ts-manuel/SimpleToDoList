@@ -11,6 +11,10 @@ on:
     branches: [develop]
   workflow_dispatch:
   workflow_call:
+    outputs:
+      version:
+        description: "The calculated version string"
+        value: ${{ jobs.version.outputs.version }}
 
 jobs:
   test:
