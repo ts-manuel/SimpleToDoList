@@ -1,0 +1,49 @@
+# This action is triggered by a call from the CI workflow.
+# It performs the testing on the supported platforms.
+
+name: Test
+on:
+  workflow_call:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - name: Windows x64
+            os: windows-2022
+            runtime: win-x64
+#          - name: Windows ARM64
+#            os: windows-2022
+#            runtime: win-arm64
+#          - name: macOS (Intel)
+#            os: macos-15-intel
+#            runtime: osx-x64
+#          - name: macOS (Apple Silicon)
+#            os: macos-latest
+#            runtime: osx-arm64
+          - name: Linux
+            os: ubuntu-latest
+            runtime: linux-x64
+#          - name: Linux (arm64)
+#            os: ubuntu-latest
+#            runtime: linux-arm64
+    name: Test ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build the solution
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run unit tests with report
+        run: dotnet test --configuration Release --no-build

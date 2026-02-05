@@ -1,0 +1,45 @@
+# This action is triggered by a call from other workflows.
+# It calculates the version string based on git tags or date.
+# The result is an output variable containing the version string.
+# If the current commit is tagged with a version tag (vX.Y.Z), that version is used.
+# Otherwise, a date-based version string (yyyymmdd.hhmm) is generated.
+
+name: Version Generator
+on:
+  workflow_call:
+    outputs:
+      version:
+        description: "The calculated version string"
+        value: ${{ jobs.version.outputs.version }}
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.final.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Necessary to see tags
+
+      - name: Determine Version
+        id: determine
+        shell: bash
+        run: |
+          # Check if the current HEAD has a tag matching v*.*.*
+          TAG=$(git tag --points-at HEAD 'v[0-9]*.[0-9]*.[0-9]*' | head -n1)
+          
+          if [ -n "$TAG" ]; then
+            # Strip the 'v' from the start
+            echo "detected_version=${TAG#v}" >> $GITHUB_OUTPUT
+            echo "type=tag" >> $GITHUB_OUTPUT
+          else
+            # Fallback to date format yyyymmdd.hhmm
+            echo "detected_version=$(date +'%Y%m%d.%H%M')" >> $GITHUB_OUTPUT
+            echo "type=date" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set Final Output
+        id: final
+        run: echo "version=${{ steps.determine.outputs.detected_version }}" >> $GITHUB_OUTPUT
